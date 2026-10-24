@@ -1,8 +1,7 @@
+  package com.example;
 
-package com.example;
-
-public class App {
-    public static void main(String[] args) {
-        System.out.println("Hello from Jenkins CI/CD! My first pipeline");
-    }
-}
+  public class App {
+      public static void main(String[] args) {
+          System.out.println("Hello from Jenkins CI/CD! my first pipeline");
+      }
+  }

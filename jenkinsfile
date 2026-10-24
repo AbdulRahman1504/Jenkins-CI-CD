@@ -2,7 +2,7 @@ pipeline {
     agent any
 
     tools {
-        maven 'Maven-3.10'   // name of your Maven 3.10 entry in Manage Jenkins -> Tools
+        maven 'maven-3.10'   // name of your Maven 3.10 entry in Manage Jenkins -> Tools
         jdk 'JDK25'      // name of your JDK 25 entry in Manage Jenkins -> Tools
     }
 

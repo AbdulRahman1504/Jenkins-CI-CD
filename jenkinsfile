@@ -1,6 +1,19 @@
-
 pipeline {
     agent any
+
+    tools {
+        maven 'Maven3'   // name of your Maven 3.10 entry in Manage Jenkins -> Tools
+        jdk 'JDK25'      // name of your JDK 25 entry in Manage Jenkins -> Tools
+    }
+
+    triggers {
+        githubPush()     // runs when the GitHub webhook fires
+    }
+
+    options {
+        timestamps()
+        buildDiscarder(logRotator(numToKeepStr: '10'))
+    }
 
     stages {
         stage('Checkout') {
@@ -11,24 +24,22 @@ pipeline {
 
         stage('Build with Maven') {
             steps {
-                sh 'mvn clean package'
+                bat 'mvn -B clean package'
             }
         }
 
         stage('Verify Artifact') {
             steps {
-                sh 'test -f target/jenkins-maven-cicd-1.0-SNAPSHOT.jar'
+                bat 'if not exist target\\jenkins-maven-cicd-1.0-SNAPSHOT.jar exit /b 1'
             }
         }
     }
 
     post {
         success {
-            archiveArtifacts artifacts: 'target/*.jar',
-                             fingerprint: true
+            archiveArtifacts artifacts: 'target/*.jar', fingerprint: true
             echo 'BUILD SUCCESS: JAR archived.'
         }
-
         failure {
             echo 'BUILD FAILURE: Check the console output.'
         }

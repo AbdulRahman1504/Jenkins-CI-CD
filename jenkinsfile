@@ -1,0 +1,36 @@
+
+pipeline {
+    agent any
+
+    stages {
+        stage('Checkout') {
+            steps {
+                checkout scm
+            }
+        }
+
+        stage('Build with Maven') {
+            steps {
+                sh 'mvn clean package'
+            }
+        }
+
+        stage('Verify Artifact') {
+            steps {
+                sh 'test -f target/jenkins-maven-cicd-1.0-SNAPSHOT.jar'
+            }
+        }
+    }
+
+    post {
+        success {
+            archiveArtifacts artifacts: 'target/*.jar',
+                             fingerprint: true
+            echo 'BUILD SUCCESS: JAR archived.'
+        }
+
+        failure {
+            echo 'BUILD FAILURE: Check the console output.'
+        }
+    }
+}
